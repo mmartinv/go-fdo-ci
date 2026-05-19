@@ -37,8 +37,8 @@ Complete record of every file: where it came from, where it landed, and what (if
 
 **Total files: 63**
 - New (created from scratch): 3
-- Copied unchanged: 44
-- Copied with modifications: 16
+- Copied unchanged: 29
+- Copied with modifications: 31
 
 ### New Files
 
@@ -75,22 +75,22 @@ Complete record of every file: where it came from, where it landed, and what (if
 
 #### `test/container/` — Container-Based E2E Tests
 
-> These scripts reference `deployments/compose/` via relative path. That directory stays in `go-fdo-server`. GitHub Actions must checkout `go-fdo-server` alongside `go-fdo-ci` when running container tests.
+> These scripts use `${COMPOSE_DIR}` (default: `deployments/compose`) to locate compose files. That directory stays in `go-fdo-server`. GitHub Actions must checkout `go-fdo-server` alongside `go-fdo-ci` when running container tests.
 
 | Source | Destination | Changes |
 |---|---|---|
-| `test/container/utils.sh` | `test/container/utils.sh` | Unchanged |
-| `test/container/test-device-ca-api.sh` | `test/container/test-device-ca-api.sh` | Unchanged |
-| `test/container/test-device-ca-rendezvous-trust.sh` | `test/container/test-device-ca-rendezvous-trust.sh` | Unchanged |
-| `test/container/test-fsim-download.sh` | `test/container/test-fsim-download.sh` | Unchanged |
-| `test/container/test-fsim-upload.sh` | `test/container/test-fsim-upload.sh` | Unchanged |
-| `test/container/test-fsim-wget.sh` | `test/container/test-fsim-wget.sh` | Unchanged |
-| `test/container/test-health-api-postgres.sh` | `test/container/test-health-api-postgres.sh` | Unchanged |
-| `test/container/test-onboarding-config.sh` | `test/container/test-onboarding-config.sh` | Unchanged |
-| `test/container/test-onboarding-postgres.sh` | `test/container/test-onboarding-postgres.sh` | Unchanged |
-| `test/container/test-onboarding.sh` | `test/container/test-onboarding.sh` | Unchanged |
-| `test/container/test-ov-verification.sh` | `test/container/test-ov-verification.sh` | Unchanged |
-| `test/container/test-resale.sh` | `test/container/test-resale.sh` | Unchanged |
+| `test/container/utils.sh` | `test/container/utils.sh` | Added `COMPOSE_DIR` variable with default value; compose file paths use `${COMPOSE_DIR}` |
+| `test/container/test-device-ca-api.sh` | `test/container/test-device-ca-api.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-device-ca-rendezvous-trust.sh` | `test/container/test-device-ca-rendezvous-trust.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-fsim-download.sh` | `test/container/test-fsim-download.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-fsim-upload.sh` | `test/container/test-fsim-upload.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-fsim-wget.sh` | `test/container/test-fsim-wget.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-health-api-postgres.sh` | `test/container/test-health-api-postgres.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-onboarding-config.sh` | `test/container/test-onboarding-config.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-onboarding-postgres.sh` | `test/container/test-onboarding-postgres.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-onboarding.sh` | `test/container/test-onboarding.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-ov-verification.sh` | `test/container/test-ov-verification.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
+| `test/container/test-resale.sh` | `test/container/test-resale.sh` | Hardcoded `deployments/compose/` replaced with `${COMPOSE_DIR}` |
 
 #### `test/rpm/` — RPM-Installed Server Tests
 
@@ -195,4 +195,4 @@ The client stored its bootc test script alongside FMF metadata in `test/fmf/test
 
 ### What Stayed in `go-fdo-server` (Not Moved)
 
-`deployments/compose/` — Docker Compose files used by `test/container/` scripts. These scripts reference `deployments/compose/` as a bare relative path (no `../` prefix), so they require the CWD to be the `go-fdo-server` repo root at runtime. For GitHub Actions, this means `go-fdo-server` must be checked out **at the workspace root** (no `path:` parameter), with `go-fdo-ci` checked out to a subdirectory (e.g., `path: ci`). Checking out `go-fdo-server` to a subdirectory like `path: server` would break these paths.
+`deployments/compose/` — Docker Compose files used by `test/container/` scripts. These scripts locate the compose files via the `COMPOSE_DIR` environment variable (default: `deployments/compose`). For GitHub Actions, the simplest layout is to checkout `go-fdo-server` at the workspace root so the default path works. Alternatively, set `COMPOSE_DIR` to match the actual checkout layout (e.g., `COMPOSE_DIR=server/deployments/compose`).
