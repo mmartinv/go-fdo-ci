@@ -2,8 +2,9 @@
 
 set -euo pipefail
 
-client_compose_file="deployments/compose/client/fdo-client.yaml"
-servers_compose_file="deployments/compose/server/fdo-onboarding-servers.yaml"
+COMPOSE_DIR="${COMPOSE_DIR:-deployments/compose}"
+client_compose_file="${COMPOSE_DIR}/client/fdo-client.yaml"
+servers_compose_file="${COMPOSE_DIR}/server/fdo-onboarding-servers.yaml"
 
 # Export base_dir explicitly for Docker Compose
 export base_dir

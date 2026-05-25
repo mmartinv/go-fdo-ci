@@ -5,8 +5,8 @@ set -euo pipefail
 source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/../ci/test-onboarding.sh"
 source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/utils.sh"
 
-client_compose_file="deployments/compose/client/fdo-client.yaml"
-servers_compose_file="deployments/compose/server/fdo-onboarding-servers-postgres.yaml"
+client_compose_file="${COMPOSE_DIR}/client/fdo-client.yaml"
+servers_compose_file="${COMPOSE_DIR}/server/fdo-onboarding-servers-postgres.yaml"
 
 # Allow running directly
 [[ "${BASH_SOURCE[0]}" != "$0" ]] || {
