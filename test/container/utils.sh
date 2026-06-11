@@ -9,6 +9,10 @@ servers_compose_file="${compose_dir}/server/test-onboarding.yaml"
 # Export base_dir explicitly for Docker Compose
 export base_dir
 
+# Export client and server source dir for Docker Compose
+export client_src_dir
+export server_src_dir
+
 # Export container_user explicitly for Docker Compose
 container_user="$(id -u):$(id -g)"
 export container_user
@@ -40,12 +44,14 @@ unset_hostnames() {
 }
 
 install_client() {
-  docker compose --file "${client_compose_file}" build -q
+  fetch_client_repo
+  docker compose --file "${client_compose_file}" build -q go-fdo-client
 }
 
 uninstall_client() {
   # we don't need to remove any container, all of them are removed after invocation
-  return
+  # but we need to remove the container image.
+  docker compose --file "${client_compose_file}" down
 }
 
 run_go_fdo_client() {
@@ -64,7 +70,8 @@ run_go_fdo_client() {
 }
 
 install_server() {
-  docker compose --file "${servers_compose_file}" build -q
+  fetch_server_repo
+  docker compose --file "${servers_compose_file}" build -q go-fdo-server
 }
 
 uninstall_server() {

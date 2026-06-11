@@ -13,6 +13,9 @@ certs_dir="${base_dir}/certs"
 db_dir="${base_dir}/db"
 credentials_dir="${base_dir}/device-credentials"
 
+server_src_dir="${SERVER_LOCAL_PATH:-${PWD}/src/server}"
+client_src_dir="${CLIENT_LOCAL_PATH:-${PWD}/src/client}"
+
 device_ca_key="${certs_dir}/device_ca.key"
 device_ca_crt="${device_ca_key/\.key/.crt}"
 device_ca_subj="/C=US/O=FDO/CN=Device CA"
@@ -101,7 +104,7 @@ client_timeout="300s"
 to0_wait_seconds=10
 
 declare -a services=("${manufacturer_service_name}" "${rendezvous_service_name}" "${owner_service_name}")
-declare -a directories=("${base_dir}" "${certs_dir}" "${credentials_dir}" "${logs_dir}" "${db_dir}")
+declare -a directories=("${base_dir}" "${bin_dir}" "${certs_dir}" "${credentials_dir}" "${logs_dir}" "${db_dir}")
 
 # Colors for output
 RED='\033[0;31m'
@@ -265,7 +268,7 @@ run_go_fdo_client() {
   # If the command times out, the return code is 124 (see: man timeout)
   # If the command finishes before the timeout, the return code comes from 'go-fdo-client'
   local exit_code=0
-  timeout "${client_timeout}" go-fdo-client "$@" || exit_code=$?
+  timeout "${client_timeout}" "${bin_dir}/go-fdo-client" "$@" || exit_code=$?
   if [[ ${exit_code} -ne 0 ]]; then
     log_warn "'go-fdo-client' exited with '${exit_code}' (124 -> timeout):\n  - go-fdo-client $*"
   fi
@@ -401,32 +404,45 @@ stop_services() {
   done
 }
 
-install_client() {
-  if [ -n "${CLIENT_LOCAL_PATH:-}" ]; then
-    log_info "Building client from local path: ${CLIENT_LOCAL_PATH}"
-    pushd "${CLIENT_LOCAL_PATH}" > /dev/null
-    make build && install -m 755 go-fdo-client "$(go env GOPATH)/bin/"
-    popd > /dev/null
-  else
-    go install "github.com/fido-device-onboard/go-fdo-client@${CLIENT_REF:-main}"
+fetch_client_repo() {
+  [ -d "${client_src_dir}" ] || git clone --single-branch https://github.com/fido-device-onboard/go-fdo-client "${client_src_dir}"
+  if [ -v "CLIENT_REF" ]; then
+    pushd "${client_src_dir}" >/dev/null
+    git fetch origin "${CLIENT_REF}"
+    git checkout "FETCH_HEAD"
+    popd >/dev/null
   fi
+}
+
+install_client() {
+  fetch_client_repo
+  log_info "Building client from local path: ${client_src_dir}"
+  pushd "${client_src_dir}" >/dev/null
+  make && install -m 755 go-fdo-client "${bin_dir}" && rm -f go-fdo-client
+  popd >/dev/null
 }
 
 uninstall_client() {
   log_info "Uninstalling client"
-  rm -vf "$(go env GOPATH)/bin/go-fdo-client"
+  rm -vf "${bin_dir}/go-fdo-client"
+}
+
+fetch_server_repo() {
+  [ -d "${server_src_dir}" ] || git clone --single-branch https://github.com/fido-device-onboard/go-fdo-server "${server_src_dir}"
+  if [ -v "SERVER_REF" ]; then
+    pushd "${server_src_dir}" >/dev/null
+    git fetch origin "${SERVER_REF}"
+    git checkout "FETCH_HEAD"
+    popd >/dev/null
+  fi
 }
 
 install_server() {
-  mkdir -p "${bin_dir}"
-  if [ -n "${SERVER_LOCAL_PATH:-}" ]; then
-    log_info "Building server from local path: ${SERVER_LOCAL_PATH}"
-    pushd "${SERVER_LOCAL_PATH}" > /dev/null
-    make build && install -m 755 go-fdo-server "${bin_dir}" && rm -f go-fdo-server
-    popd > /dev/null
-  else
-    make build && install -m 755 go-fdo-server "${bin_dir}" && rm -f go-fdo-server
-  fi
+  fetch_server_repo
+  log_info "Building server from local path: ${server_src_dir}"
+  pushd "${server_src_dir}" >/dev/null
+  make && install -m 755 go-fdo-server "${bin_dir}" && rm -f go-fdo-server
+  popd >/dev/null
 }
 
 uninstall_server() {
