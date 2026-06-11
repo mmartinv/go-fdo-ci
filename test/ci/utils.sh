@@ -107,28 +107,28 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 log() {
-  echo -ne "$@"
+  echo -ne "$@" >&2
 }
 
 log_info() {
-  echo -e "${BLUE}[INFO]${NC} ⭐" "$@"
+  log "${BLUE}[INFO]${NC} ⭐" "$@" "\n"
 }
 
 log_warn() {
-  echo -e "${YELLOW}[WARN]${NC} 🚧" "$@"
+  log "${YELLOW}[WARN]${NC} 🚧" "$@" "\n"
 }
 
 log_success() {
-  echo -e "✔" "$@"
+  log "✔" "$@" "\n"
 }
 
 log_error() {
-  echo -e "${RED}[ERROR]${NC} ❌" "$@"
+  log "${RED}[ERROR]${NC} ❌" "$@" "\n"
   return 1
 }
 
 test_pass() {
-  echo -e "${GREEN}[PASS]${NC} ✅ Test PASSED!"
+  log "${GREEN}[PASS]${NC} ✅ Test PASSED!\n"
 }
 
 test_fail() {
@@ -136,7 +136,7 @@ test_fail() {
 }
 
 show_env() {
-  env -0 | sort -z | tr '\0' '\n'
+  env -0 | sort -z | tr '\0' '\n' >&2
 }
 
 find_in_log() {
