@@ -48,18 +48,18 @@ run_test() {
 
   expected="1"
   log_info "Uploading ${expected} certs to the rendezvous server"
-  add_device_ca_cert ${rendezvous_url} ${device_ca_crt} | jq -r -M .
+  add_device_ca_cert "${rendezvous_url}" "${device_ca_crt}" | jq -r -M .
   log_info "Refresh the device CA certs from API"
-  get_device_ca_certs ${rendezvous_url} | jq -r -M . | tee "${certs_file}"
+  get_device_ca_certs "${rendezvous_url}" | jq -r -M . | tee "${certs_file}"
   actual="$(get_cert_array_length)"
   log_info "Checking certs array is correct after the upload"
   [ "${actual}" = "${expected}" ] || log_error "Unexpected cert array size, expected: '${expected}' actual: '${actual}'"
 
   expected="1"
   log_info "Uploading the same cert to the rendezvous server"
-  add_device_ca_cert ${rendezvous_url} ${device_ca_crt} | jq -r -M .
+  add_device_ca_cert "${rendezvous_url}" "${device_ca_crt}" | jq -r -M .
   log_info "Refresh the device CA certs from API"
-  get_device_ca_certs ${rendezvous_url} | jq -r -M . | tee "${certs_file}"
+  get_device_ca_certs "${rendezvous_url}" | jq -r -M . | tee "${certs_file}"
   actual="$(get_cert_array_length)"
   log_info "Checking certs array is correct after the upload of existing cert"
   [ "${actual}" = "${expected}" ] || log_error "Unexpected cert array size, expected: '${expected}' actual: '${actual}'"
@@ -67,19 +67,19 @@ run_test() {
   expected="3"
   log_info "Uploading the same cert + 2 additional certs from the same file"
   cat "${device_ca_crt}" "${owner_crt}" "${manufacturer_crt}" >>"${multiple_certs_file}"
-  add_device_ca_cert ${rendezvous_url} ${multiple_certs_file} | jq -r -M .
+  add_device_ca_cert "${rendezvous_url}" "${multiple_certs_file}" | jq -r -M .
   log_info "Refresh the device CA certs from API"
-  get_device_ca_certs ${rendezvous_url} | jq -r -M . | tee "${certs_file}"
+  get_device_ca_certs "${rendezvous_url}" | jq -r -M . | tee "${certs_file}"
   actual="$(get_cert_array_length)"
   log_info "Checking certs array is correct after the upload of multiple certs"
   [ "${actual}" = "${expected}" ] || log_error "Unexpected cert array size, expected: '${expected}' actual: '${actual}'"
 
   log_info "Deleting the first device ca certificate"
   fingerprint=$(get_cert_fingerprint 0)
-  delete_device_ca_cert ${rendezvous_url} ${fingerprint} | jq -r -M . | tee "${certs_file}"
+  delete_device_ca_cert "${rendezvous_url}" "${fingerprint}" | jq -r -M . | tee "${certs_file}"
 
   log_info "Refresh the device CA certs from API"
-  get_device_ca_certs ${rendezvous_url} | jq -r -M . | tee "${certs_file}"
+  get_device_ca_certs "${rendezvous_url}" | jq -r -M . | tee "${certs_file}"
   expected="2"
   actual="$(get_cert_array_length)"
   log_info "Checking certs array is correct after removing one"

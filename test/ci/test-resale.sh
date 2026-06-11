@@ -90,7 +90,7 @@ run_test() {
   send_manufacturer_ov_to_owner "${manufacturer_url}" "${guid}" "${owner_url}"
 
   log_info "Extracting the public key from the New Owner cert"
-  extract_pubkey_from_cert ${new_owner_crt} ${new_owner_pub}
+  extract_pubkey_from_cert "${new_owner_crt}" "${new_owner_pub}"
 
   log_info "Trigger the Resell protocol on the current owner"
   resell "${owner_url}" "${guid}" "${new_owner_pub}" "${new_owner_ov}"

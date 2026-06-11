@@ -379,7 +379,7 @@ start_services() {
   log_info "Starting Services"
   for service in "${services[@]}"; do
     log "  ⚙ Starting service ${service} "
-    start_service ${service}
+    start_service "${service}"
     log_success
   done
 }

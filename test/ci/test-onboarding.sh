@@ -51,7 +51,7 @@ run_test() {
   send_manufacturer_ov_to_owner "${manufacturer_url}" "${guid}" "${owner_url}"
 
   log_info "Running FIDO Device Onboard"
-  run_fido_device_onboard ${guid} --debug || log_error "Onboarding failed!"
+  run_fido_device_onboard "${guid}" --debug || log_error "Onboarding failed!"
 
   log_info "Unsetting the error trap handler"
   trap - EXIT

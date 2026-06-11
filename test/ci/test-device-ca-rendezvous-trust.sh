@@ -60,7 +60,7 @@ run_test() {
   add_device_ca_cert "${rendezvous_url}" "${device_ca_crt}" | jq -r -M .
 
   log_info "Get the rendezvous Device CA certificates"
-  fingerprint=$(get_device_ca_certs ${rendezvous_url} | jq -r -M '.certs[0].fingerprint')
+  fingerprint=$(get_device_ca_certs "${rendezvous_url}" | jq -r -M '.certs[0].fingerprint')
 
   log_info "Deleting certificate with fingerprint '${fingerprint}'"
   delete_device_ca_cert "${rendezvous_url}" "${fingerprint}"
