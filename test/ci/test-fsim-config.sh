@@ -25,17 +25,6 @@ owner_upload_dir="${base_dir}/fsim/upload"
 test_script_name="test-script.sh"
 test_file_content="Hello from the FDO client!"
 
-# https://github.com/fido-device-onboard/go-fdo/issues/210
-# When uploading or downloading files to go-fdo library creates a
-# temporary file then uses os.Rename() to "move" the file to the
-# proper destination. This fails on fedora/rhel because the default
-# temporary directory /tmp is a tmpfs mount and os.Rename cannot
-# "move" files across filesystems. This really needs to be fixed in
-# the go-fdo library.
-tmp_dir="${base_dir}/tmp"
-directories+=("${tmp_dir}")
-export TMPDIR="${tmp_dir}"
-
 # This creates the test script in the download directory of the owner server
 # Note that the test downloads this script to the device and gives it
 # a different filename on the device to ensure the device correctly
