@@ -44,8 +44,8 @@ start_service_new_owner() {
   fi
   run_go_fdo_server owner "${new_owner_service}" "${new_owner_db_type}" "${new_owner_db_dsn}" "${new_owner_pid_file}" "${new_owner_log}" \
     --owner-key="${new_owner_key}" \
-    --device-ca-cert="${device_ca_crt}"
-  "${extra_opts[@]}"
+    --device-ca-cert="${device_ca_crt}" \
+    "${extra_opts[@]}"
 }
 
 run_test() {
