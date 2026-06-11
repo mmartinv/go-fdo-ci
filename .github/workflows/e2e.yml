@@ -21,6 +21,7 @@ on:
 
 jobs:
   setup:
+    name: "Setup test matrix"
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.generate.outputs.matrix }}
@@ -50,10 +51,6 @@ jobs:
     name: "${{ matrix.type }}: ${{ matrix.name }}"
     runs-on: ubuntu-latest
     needs: setup
-    env:
-      SERVER_LOCAL_PATH: ${{ github.workspace }}/server
-      CLIENT_LOCAL_PATH: ${{ github.workspace }}/client
-      COMPOSE_DIR: server/deployments/compose
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
@@ -74,14 +71,14 @@ jobs:
         with:
           repository: fido-device-onboard/go-fdo-server
           ref: ${{ inputs.go-fdo-server-ref || 'main' }}
-          path: server
+          path: src/server
 
       - name: Check out go-fdo-client
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           repository: fido-device-onboard/go-fdo-client
           ref: ${{ inputs.go-fdo-client-ref || 'main' }}
-          path: client
+          path: src/client
 
       - name: ${{ matrix.name }}
         run: |
