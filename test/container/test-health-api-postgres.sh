@@ -37,13 +37,13 @@ run_test() {
   wait_for_services_ready
 
   log_info "Checking the service is healthy"
-  curl --fail --verbose ${rendezvous_health_url}
+  curl --fail --verbose "${rendezvous_health_url}"
 
   log_info "Stopping rendezvous database"
   stop_service rendezvous-db
 
   log_info "Checking the service is unhealthy"
-  ! curl --fail --verbose ${rendezvous_health_url} || log_error "Expected unhealty service"
+  ! curl --fail --verbose "${rendezvous_health_url}" || log_error "Expected unhealthy service"
 
   log_info "Unsetting the error trap handler"
   trap - EXIT

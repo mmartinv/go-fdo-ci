@@ -91,9 +91,9 @@ get_service_logs() {
 
 get_logs() {
   log_info "Retrieving logs"
-  for service in $(docker compose --file ${servers_compose_file} config --services); do
+  for service in $(docker compose --file "${servers_compose_file}" config --services); do
     log "🛑 '${service}' logs:\n"
-    get_service_logs ${service}
+    get_service_logs "${service}"
   done
 }
 
@@ -105,9 +105,9 @@ save_service_logs() {
 
 save_logs() {
   log_info "Saving logs"
-  for service in $(docker compose --file ${servers_compose_file} config --services); do
+  for service in $(docker compose --file "${servers_compose_file}" config --services); do
     log "\t⚙ Saving '${service}' logs "
-    save_service_logs ${service}
+    save_service_logs "${service}"
     log_success
   done
 }
