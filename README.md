@@ -23,11 +23,11 @@ test/
 
 | Plan | Filter | What it runs |
 |---|---|---|
-| `test/fmf/plans/rpm-e2e.fmf` | `tag:rpm` | 4 server RPM install tests |
-| `test/fmf/plans/bootc-e2e.fmf` | `tag:bootc & tag:server` | Server bootc image test |
-| `test/fmf/plans/e2e.fmf` | `tag:e2e & tag:client` | 2 client E2E onboarding tests |
-| `test/fmf/plans/bootc-onboarding.fmf` | `tag:bootc & tag:client` | Client bootc image test |
-| `test/fmf/plans/coordinated-e2e.fmf` | `tag:coordinated` | Server@PR + client@PR together |
+| `plans/rpm-e2e.fmf` | `tag:rpm` | 4 server RPM install tests |
+| `plans/bootc-e2e.fmf` | `tag:bootc & tag:server` | Server bootc image test |
+| `plans/e2e.fmf` | `tag:e2e & tag:client` | 2 client E2E onboarding tests |
+| `plans/bootc-onboarding.fmf` | `tag:bootc & tag:client` | Client bootc image test |
+| `plans/coordinated-e2e.fmf` | `tag:coordinated` | Server@PR + client@PR together |
 
 ---
 
@@ -46,7 +46,7 @@ Complete record of every file: where it came from, where it landed, and what (if
 |---|---|
 | `.fmf/version` | FMF tree root marker — makes this repo tmt-discoverable |
 | `README.md` | This file |
-| `test/fmf/plans/coordinated-e2e.fmf` | Plan for coordinated server@PR + client@PR testing |
+| `plans/coordinated-e2e.fmf` | Plan for coordinated server@PR + client@PR testing |
 
 ---
 
@@ -124,8 +124,8 @@ Complete record of every file: where it came from, where it landed, and what (if
 
 | Source | Destination | Changes |
 |---|---|---|
-| `test/fmf/plans/rpm-e2e.fmf` | `test/fmf/plans/rpm-e2e.fmf` | Unchanged — `tag:rpm` is already unambiguous |
-| `test/fmf/plans/bootc-e2e.fmf` | `test/fmf/plans/bootc-e2e.fmf` | Filter: `tag:bootc` → `tag:bootc & tag:server` |
+| `plans/rpm-e2e.fmf` | `plans/rpm-e2e.fmf` | Unchanged — `tag:rpm` is already unambiguous |
+| `plans/bootc-e2e.fmf` | `plans/bootc-e2e.fmf` | Filter: `tag:bootc` → `tag:bootc & tag:server` |
 | `test/fmf/tests/rpm-test-onboarding.fmf` | `test/fmf/tests/rpm-test-onboarding.fmf` | Added `tag:server` tag |
 | `test/fmf/tests/rpm-test-onboarding-defaults.fmf` | `test/fmf/tests/rpm-test-onboarding-defaults.fmf` | Added `tag:server` tag |
 | `test/fmf/tests/rpm-test-onboarding-deferred-rendezvous.fmf` | `test/fmf/tests/rpm-test-onboarding-deferred-rendezvous.fmf` | Added `tag:server` tag |
@@ -155,8 +155,8 @@ Complete record of every file: where it came from, where it landed, and what (if
 
 | Source | Destination | Changes |
 |---|---|---|
-| `test/fmf/plans/e2e.fmf` | `test/fmf/plans/e2e.fmf` | Filter: `tag:e2e` → `tag:e2e & tag:client` |
-| `test/fmf/plans/bootc-onboarding.fmf` | `test/fmf/plans/bootc-onboarding.fmf` | Filter: `tag:bootc` → `tag:bootc & tag:client` |
+| `plans/e2e.fmf` | `plans/e2e.fmf` | Filter: `tag:e2e` → `tag:e2e & tag:client` |
+| `plans/bootc-onboarding.fmf` | `plans/bootc-onboarding.fmf` | Filter: `tag:bootc` → `tag:bootc & tag:client` |
 | `test/fmf/tests/e2e-onboarding.fmf` | `test/fmf/tests/e2e-onboarding.fmf` | Added `tag:client` and `tag:coordinated` tags |
 | `test/fmf/tests/retry-loop.fmf` | `test/fmf/tests/retry-loop.fmf` | Added `tag:client` and `tag:coordinated` tags |
 | `test/fmf/tests/bootc-onboarding.fmf` | `test/fmf/tests/bootc-onboarding.fmf` | Added `tag:client` tag; fixed `test:` path to `../../bootc/test-bootc-onboarding.sh` |
