@@ -3,8 +3,8 @@
 
 set -euo pipefail
 
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/utils.sh"
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/../utils/mgmt-api-v1.sh"
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/../../utils/native.sh"
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/../../utils/mgmt-api-v1.sh"
 
 # Override rv_info to point to owner with rv_bypass flag
 rv_info="[{\"dns\": \"${owner_dns}\", \"device_port\": \"${owner_port}\", \"protocol\": \"${owner_protocol}\", \"ip\": \"${owner_ip}\", \"owner_port\": \"${owner_port}\", \"rv_bypass\": true}]"

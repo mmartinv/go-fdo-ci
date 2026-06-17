@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/../utils/certs.sh"
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/certs.sh"
 
 base_dir="${PWD}/workdir"
 bin_dir="${base_dir}/bin"
