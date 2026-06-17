@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-compose_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/compose"
+compose_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/../test/container/compose"
 client_compose_file="${compose_dir}/client/client.yaml"
 servers_compose_file="${compose_dir}/server/test-onboarding.yaml"
 
