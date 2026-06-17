@@ -54,7 +54,7 @@ run_test() {
   send_manufacturer_ov_to_owner "${manufacturer_url}" "${guid}" "${owner_url}"
 
   log_info "Setting or updating Owner Redirect Info (RVTO2Addr)"
-  set_or_update_rvto2addr "${owner_url}" "${owner_service_name}" "${owner_dns}" "${owner_port}" "${owner_protocol}"
+  set_or_update_rvto2addr "${owner_url}" "${rvto2addr}"
 
   sleep 60
 

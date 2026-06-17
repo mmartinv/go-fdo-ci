@@ -48,6 +48,8 @@ start_service_new_owner() {
     "${extra_opts[@]}"
 }
 
+new_owner_rvto2addr="[{\"ip\": \"${new_owner_ip}\", \"dns\": \"${new_owner_dns}\", \"port\": \"${new_owner_port}\", \"protocol\": \"${new_owner_protocol}\"}]"
+
 run_test() {
   # Add the new owner service defined above
   services+=("${new_owner_service_name}")
@@ -76,6 +78,9 @@ run_test() {
   log_info "Wait for the services to be ready:"
   wait_for_services_ready
 
+  log_info "Resolving real owner IP for RVTO2Addr"
+  rvto2addr=$(resolve_rvto2addr "${owner_service_name}" "${rvto2addr}")
+
   log_info "Setting or updating Rendezvous Info (RendezvousInfo)"
   set_or_update_rendezvous_info "${manufacturer_url}" "${rv_info}"
 
@@ -96,7 +101,8 @@ run_test() {
   resell "${owner_url}" "${guid}" "${new_owner_pub}" "${new_owner_ov}"
 
   log_info "Setting or updating the New Owner Redirect Info (RVTO2Addr)"
-  set_or_update_rvto2addr "${new_owner_url}" "${new_owner_service_name}" "${new_owner_dns}" "${new_owner_port}" "${new_owner_protocol}"
+  new_owner_rvto2addr=$(resolve_rvto2addr "${new_owner_service_name}" "${new_owner_rvto2addr}")
+  set_or_update_rvto2addr "${new_owner_url}" "${new_owner_rvto2addr}"
 
   log_info "Sending the Ownership Voucher to the New Owner"
   send_ov_to_owner "${new_owner_url}" "${new_owner_ov}"

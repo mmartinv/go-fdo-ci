@@ -5,6 +5,9 @@ set -euo pipefail
 # Default RV info JSON for standard tests (can be overridden per test)
 rv_info="[[{\"dns\": \"${rendezvous_dns}\"}, {\"device_port\": ${rendezvous_port}}, {\"protocol\": \"${rendezvous_protocol}\"}, {\"ip\": \"${rendezvous_ip}\"}, {\"owner_port\": ${rendezvous_port}}]]"
 
+# Default RVTO2Addr JSON for standard tests (can be overridden per test)
+rvto2addr="[{\"ip\": \"${owner_ip}\", \"dns\": \"${owner_dns}\", \"port\": ${owner_port}, \"protocol\": \"${owner_protocol}\"}]"
+
 # V2 API functions (local overrides)
 get_rendezvous_info() {
   local manufacturer_url=$1
@@ -44,16 +47,12 @@ get_rvto2addr() {
 
 set_rvto2addr() {
   local owner_url=$1
-  local ip=$2
-  local dns=$3
-  local port=$4
-  local protocol=$5
-  local rvto2addr="[{\"ip\": \"${ip}\", \"dns\": \"${dns}\", \"port\": ${port}, \"protocol\": \"${protocol}\"}]"
+  local rvto2addr_json=$2
   curl --fail --verbose --silent --insecure \
     --request PUT \
     --header 'Accept: application/json' \
     --header 'Content-Type: application/json' \
-    --data-raw "${rvto2addr}" \
+    --data-raw "${rvto2addr_json}" \
     "${owner_url}/api/v2/rvto2addr"
 }
 

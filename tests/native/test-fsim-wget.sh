@@ -115,6 +115,9 @@ run_test() {
   log_info "Wait for the services to be ready:"
   wait_for_services_ready
 
+  log_info "Resolving real owner IP for RVTO2Addr"
+  rvto2addr=$(resolve_rvto2addr "${owner_service_name}" "${rvto2addr}")
+
   log_info "Prepare the wget test payload file on server side: '${wget_source_file1}', '${wget_source_file2}'"
   prepare_payload "${wget_source_file1}"
   prepare_payload "${wget_source_file2}"
@@ -131,7 +134,7 @@ run_test() {
   log_info "Device initialized with GUID: ${guid}"
 
   log_info "Setting or updating Owner Redirect Info (RVTO2Addr)"
-  set_or_update_rvto2addr "${owner_url}" "${owner_service_name}" "${owner_dns}" "${owner_port}" "${owner_protocol}"
+  set_or_update_rvto2addr "${owner_url}" "${rvto2addr}"
 
   log_info "Sending Device Ownership Voucher to the Owner"
   send_manufacturer_ov_to_owner "${manufacturer_url}" "${guid}" "${owner_url}"

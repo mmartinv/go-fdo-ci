@@ -151,6 +151,18 @@ find_in_log() {
   grep -q "${pattern}" "${log}"
 }
 
+resolve_rvto2addr() {
+  local service_name=$1
+  local rvto2addr_json=$2
+  local real_ip
+  real_ip="$(get_real_ip "${service_name}")"
+  if [ -n "${real_ip}" ]; then
+    echo "${rvto2addr_json}" | jq --arg ip "${real_ip}" '[.[] | if has("ip") then .ip = $ip else . end]'
+  else
+    echo "${rvto2addr_json}"
+  fi
+}
+
 create_directories() {
   for directory in "${directories[@]}"; do
     mkdir -p "${directory}"
@@ -512,22 +524,17 @@ send_manufacturer_ov_to_owner() {
 
 set_or_update_rvto2addr() {
   local owner_url=$1
-  local owner_service_name=$2
-  local owner_dns=$3
-  local owner_port=$4
-  local owner_protocol=${5:-http}
-  local real_owner_ip
-  real_owner_ip="$(get_real_ip "${owner_service_name}")"
+  local rvto2addr_json=$2
   log_info "Checking if 'RVTO2Addr' is configured on owner side (${owner_url})"
   local current
   current="$(get_rvto2addr "${owner_url}" || true)"
   log_info "Retrieved 'RVTO2Addr': ${current}"
   if [ -z "${current}" ] || [ "${current}" = "[]" ] || [ "${current}" = "null" ]; then
     log_warn "'RVTO2Addr' not found, creating it"
-    set_rvto2addr "${owner_url}" "${real_owner_ip}" "${owner_dns}" "${owner_port}" "${owner_protocol}"
+    set_rvto2addr "${owner_url}" "${rvto2addr_json}"
   else
     log_info "'RVTO2Addr' found, updating it"
-    update_rvto2addr "${owner_url}" "${real_owner_ip}" "${owner_dns}" "${owner_port}" "${owner_protocol}"
+    update_rvto2addr "${owner_url}" "${rvto2addr_json}"
   fi
   echo
 }
