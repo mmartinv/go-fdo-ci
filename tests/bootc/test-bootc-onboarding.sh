@@ -216,7 +216,7 @@ esac
 log_info "Building go-fdo-client rpm packages"
 pushd ../../.. && \
 make rpm
-sudo cp rpmbuild/rpms/"$(uname -m)"/*.rpm tests/fmf/tests && popd
+popd
 
 # Building bootc container with go-fdo-client installed
 log_info "Building bootc container with go-fdo-client installed"
