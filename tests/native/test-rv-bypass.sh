@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # RV bypass test: Device skips TO1 by getting Owner address directly from voucher (TO0 not needed)
 
 set -euo pipefail

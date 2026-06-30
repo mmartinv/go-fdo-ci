@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 #
 # This test verifies that a sequence of FSIMs is performed in the proper order.
 #

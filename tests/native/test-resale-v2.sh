@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # Resale test: Verify voucher extension and transfer to a new owner (V2 API)
 
 set -euo pipefail

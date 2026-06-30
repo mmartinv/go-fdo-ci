@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # TO2 retry delay configured: uses --to2-retry-delay 3s flag to add a delay
 # between TO2 owner attempts. Multiple unreachable owners cause TO2 failures
 # with delays before the real owner succeeds.

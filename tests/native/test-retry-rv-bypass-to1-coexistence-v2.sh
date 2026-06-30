@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # RV bypass + TO1 coexistence with V2 API
 
 set -euo pipefail

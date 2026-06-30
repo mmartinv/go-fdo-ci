@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # RVDelaysec configured vs default: first directive fails TO1 with a
 # configured 5s delay, second (last) directive fails TO1 triggering the
 # default 120s delay. Then SIGINT is sent to verify graceful cancellation.

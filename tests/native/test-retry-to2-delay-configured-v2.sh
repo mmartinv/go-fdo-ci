@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # TO2 retry delay configured with V2 API
 
 set -euo pipefail

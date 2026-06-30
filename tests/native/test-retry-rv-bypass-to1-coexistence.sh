@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 # RV bypass + TO1 coexistence: first directive uses bypass with unreachable
 # owners (TO2 fails multiple times with default 0s delay), then falls back
 # to normal TO1 on the second directive which succeeds.

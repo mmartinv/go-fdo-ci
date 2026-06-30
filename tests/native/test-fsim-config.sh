@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 #
 # This test verifies that a sequence of FSIMs are performed in the proper order.
 #
@@ -31,7 +31,7 @@ test_file_content="Hello from the FDO client!"
 # executes its local copy of the script
 generate_test_script() {
   cat >"${owner_download_dir}/${test_script_name}" <<EOF
-#!/bin/bash
+#!/usr/bin/env bash
 set -ueo pipefail
 outdir="\${1:?}"
 outfile="\${2:?}"
