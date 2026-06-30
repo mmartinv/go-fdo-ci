@@ -14,7 +14,7 @@ directories+=("${configs_dir}")
 configure_service_manufacturer() {
   cat >"${manufacturer_config_file}" <<EOF
 log:
-  level: "debug"
+  level: "${manufacturer_log_level}"
 db:
   type: "${manufacturer_db_type}"
   dsn: "${manufacturer_db_dsn}"
@@ -34,7 +34,7 @@ EOF
 configure_service_rendezvous() {
   cat >"${rendezvous_config_file}" <<EOF
 log:
-  level: "debug"
+  level: "${rendezvous_log_level}"
 db:
   type: "${rendezvous_db_type}"
   dsn: "${rendezvous_db_dsn}"
@@ -47,7 +47,7 @@ EOF
 configure_service_owner() {
   cat >"${owner_config_file}" <<EOF
 log:
-  level: "debug"
+  level: "${owner_log_level}"
 db:
   type: "${owner_db_type}"
   dsn: "${owner_db_dsn}"
@@ -75,18 +75,18 @@ run_go_fdo_server() {
 }
 
 start_service_manufacturer() {
-  run_go_fdo_server manufacturing ${manufacturer_pid_file} ${manufacturer_log} \
-    --config=${manufacturer_config_file}
+  run_go_fdo_server manufacturing "${manufacturer_pid_file}" "${manufacturer_log_file}" \
+    --config="${manufacturer_config_file}"
 }
 
 start_service_rendezvous() {
-  run_go_fdo_server rendezvous ${rendezvous_pid_file} ${rendezvous_log} \
-    --config=${rendezvous_config_file}
+  run_go_fdo_server rendezvous "${rendezvous_pid_file}" "${rendezvous_log_file}" \
+    --config="${rendezvous_config_file}"
 }
 
 start_service_owner() {
-  run_go_fdo_server owner ${owner_pid_file} ${owner_log} \
-    --config=${owner_config_file}
+  run_go_fdo_server owner "${owner_pid_file}" "${owner_log_file}" \
+    --config="${owner_config_file}"
 }
 
 # Allow running directly

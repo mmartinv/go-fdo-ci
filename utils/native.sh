@@ -7,6 +7,7 @@ source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/certs.sh
 base_dir="${PWD}/workdir"
 bin_dir="${base_dir}/bin"
 pid_dir="${base_dir}/run"
+log_level=debug
 logs_dir="${base_dir}/logs"
 certs_dir="${base_dir}/certs"
 db_dir="${base_dir}/db"
@@ -26,7 +27,8 @@ manufacturer_dns=manufacturer
 manufacturer_ip=127.0.0.1
 manufacturer_port=8038
 manufacturer_pid_file="${pid_dir}/manufacturer.pid"
-manufacturer_log="${logs_dir}/${manufacturer_dns}.log"
+manufacturer_log_level="${log_level}"
+manufacturer_log_file="${logs_dir}/${manufacturer_dns}.log"
 # key crt pub and subj variables are required to generate certificates
 manufacturer_key="${certs_dir}/manufacturer.key"
 #shellcheck disable=SC2034
@@ -50,7 +52,8 @@ rendezvous_dns=rendezvous
 rendezvous_ip=127.0.0.1
 rendezvous_port=8041
 rendezvous_pid_file="${pid_dir}/rendezvous.pid"
-rendezvous_log="${logs_dir}/${rendezvous_dns}.log"
+rendezvous_log_level="${log_level}"
+rendezvous_log_file="${logs_dir}/${rendezvous_dns}.log"
 rendezvous_service="${rendezvous_dns}:${rendezvous_port}"
 # Default per-service protocol; caller may override
 rendezvous_protocol=http
@@ -68,7 +71,8 @@ owner_dns=owner
 owner_ip=127.0.0.1
 owner_port=8043
 owner_pid_file="${pid_dir}/owner.pid"
-owner_log="${logs_dir}/${owner_dns}.log"
+owner_log_level="${log_level}"
+owner_log_file="${logs_dir}/${owner_dns}.log"
 # key crt pub and subj variables are required to generate certificates
 owner_key="${certs_dir}/owner.key"
 owner_crt="${owner_key/\.key/.crt}"
@@ -354,7 +358,7 @@ start_service_manufacturer() {
   if [ "${manufacturer_protocol}" = "https" ]; then
     extra_opts+=(--http-cert "${manufacturer_https_crt}" --http-key "${manufacturer_https_key}")
   fi
-  run_go_fdo_server manufacturing "${manufacturer_service}" "${manufacturer_db_type}" "${manufacturer_db_dsn}" "${manufacturer_pid_file}" "${manufacturer_log}" \
+  run_go_fdo_server manufacturing "${manufacturer_service}" "${manufacturer_db_type}" "${manufacturer_db_dsn}" "${manufacturer_pid_file}" "${manufacturer_log_file}" \
     --manufacturing-key="${manufacturer_key}" \
     --owner-cert="${owner_crt}" \
     --device-ca-cert="${device_ca_crt}" \
@@ -367,7 +371,7 @@ start_service_rendezvous() {
   if [ "${rendezvous_protocol}" = "https" ]; then
     extra_opts+=(--http-cert "${rendezvous_https_crt}" --http-key "${rendezvous_https_key}")
   fi
-  run_go_fdo_server rendezvous "${rendezvous_service}" "${rendezvous_db_type}" "${rendezvous_db_dsn}" "${rendezvous_pid_file}" "${rendezvous_log}" \
+  run_go_fdo_server rendezvous "${rendezvous_service}" "${rendezvous_db_type}" "${rendezvous_db_dsn}" "${rendezvous_pid_file}" "${rendezvous_log_file}" \
     "${extra_opts[@]}"
 }
 
@@ -380,7 +384,7 @@ start_service_owner() {
     # skip verify of rendezvous cert (self signed)
     extra_opts+=(--to0-insecure-tls)
   fi
-  run_go_fdo_server owner "${owner_service}" "${owner_db_type}" "${owner_db_dsn}" "${owner_pid_file}" "${owner_log}" \
+  run_go_fdo_server owner "${owner_service}" "${owner_db_type}" "${owner_db_dsn}" "${owner_pid_file}" "${owner_log_file}" \
     --owner-key="${owner_key}" \
     --device-ca-cert="${device_ca_crt}" \
     "${extra_opts[@]}"
@@ -547,7 +551,7 @@ set_or_update_rvto2addr() {
 
 get_service_logs() {
   local service=$1
-  local service_log_var="${service}_log"
+  local service_log_var="${service}_log_file"
   if [[ -v "${service_log_var}" ]]; then
     [ ! -f "${!service_log_var}" ] || cat "${!service_log_var}"
   fi

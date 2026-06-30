@@ -15,7 +15,7 @@ source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/test-fsi
 configure_service_owner() {
   cat >"${owner_config_file}" <<EOF
 log:
-  level: "debug"
+  level: "${owner_log_level}"
 db:
   type: "${owner_db_type}"
   dsn: "${owner_db_dsn}"

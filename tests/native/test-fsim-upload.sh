@@ -21,7 +21,7 @@ owner_files=("dest-file1" "subdir/dest-file2" "source-file3")
 configure_service_owner() {
   cat >"${owner_config_file}" <<EOF
 log:
-  level: "debug"
+  level: "${owner_log_level}"
 db:
   type: "${owner_db_type}"
   dsn: "${owner_db_dsn}"

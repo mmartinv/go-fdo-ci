@@ -93,7 +93,7 @@ systemd_owner_drop_in_dir="${systemd_drop_in_base_dir}/go-fdo-server-owner.servi
 generate_manufacturer_config() {
   cat <<EOF
 log:
-  level: "debug"
+  level: "${manufacturer_log_level}"
 db:
   type: "${rpm_manufacturer_db_type}"
   dsn: "${rpm_manufacturer_db_dsn}"
@@ -137,7 +137,7 @@ configure_service_manufacturer() {
 generate_rendezvous_config() {
   cat <<EOF
 log:
-  level: "debug"
+  level: "${rendezvous_log_level}"
 db:
   type: "${rpm_rendezvous_db_type}"
   dsn: "${rpm_rendezvous_db_dsn}"
@@ -170,7 +170,7 @@ configure_service_rendezvous() {
 generate_owner_config() {
   cat <<EOF
 log:
-  level: "debug"
+  level: "${owner_log_level}"
 db:
   type: "${rpm_owner_db_type}"
   dsn: "${rpm_owner_db_dsn}"
@@ -489,15 +489,15 @@ save_go_fdo_server_logs() {
 }
 
 save_service_logs_manufacturer() {
-  save_go_fdo_server_logs manufacturer "${manufacturer_log}"
+  save_go_fdo_server_logs manufacturer "${manufacturer_log_file}"
 }
 
 save_service_logs_rendezvous() {
-  save_go_fdo_server_logs rendezvous "${rendezvous_log}"
+  save_go_fdo_server_logs rendezvous "${rendezvous_log_file}"
 }
 
 save_service_logs_owner() {
-  save_go_fdo_server_logs owner "${owner_log}"
+  save_go_fdo_server_logs owner "${owner_log_file}"
 }
 
 save_service_logs() {
